@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "books")
 @Getter
@@ -18,4 +20,7 @@ public class Book {
     private int precio;
     @Lob
     private String sinopsis;
+    @Column(updatable = false)
+    private Date createdAt;
+    private Date updatedAt;
 }
