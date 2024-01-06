@@ -1,14 +1,12 @@
-package com.acl.biblioteca;
+package com.acl.biblioteca.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Response {
     private int status;
-    private String error;
+    private String statusText;
     private String message;
+    private String error;
 }

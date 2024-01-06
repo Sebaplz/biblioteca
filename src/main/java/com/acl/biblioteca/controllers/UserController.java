@@ -1,7 +1,8 @@
 package com.acl.biblioteca.controllers;
 
-import com.acl.biblioteca.Response;
+import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.User;
+import com.acl.biblioteca.response.ResponseUser;
 import com.acl.biblioteca.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,11 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody User user) {
         String email = user.getEmail();
         String password = user.getPassword();
-        Response response = userService.authenticateUser(email, password);
-        if (response.getStatus() == 200) {
-            return ResponseEntity.ok(response);
+        ResponseUser responseUser = userService.authenticateUser(email, password);
+        if (responseUser.getStatus() == 200) {
+            return ResponseEntity.ok(responseUser);
         } else {
-            return ResponseEntity.status(response.getStatus()).body(response);
+            return ResponseEntity.status(responseUser.getStatus()).body(responseUser);
         }
     }
 

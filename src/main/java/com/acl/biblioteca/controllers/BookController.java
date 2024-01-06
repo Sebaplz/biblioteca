@@ -1,6 +1,6 @@
 package com.acl.biblioteca.controllers;
 
-import com.acl.biblioteca.Response;
+import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;

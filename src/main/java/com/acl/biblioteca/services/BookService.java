@@ -1,6 +1,6 @@
 package com.acl.biblioteca.services;
 
-import com.acl.biblioteca.Response;
+import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,10 @@ public class BookService {
 
     public Response addBook(Book book) {
         if (book == null) {
-            //TODO: ver el status del codigo
-            return new Response(404, "Not Found", "Problema al crear el libro!");
+            return new Response(404, "Not Found", "Problema al crear el libro!", "404 Not Found!");
         }
         bookRepository.save(book);
-        return new Response(201, "", "Libro creado con éxito.");
+        return new Response(201, "Created", "Libro creado con éxito.", "");
     }
 
     public Book findBook(Long id) {
@@ -42,18 +41,18 @@ public class BookService {
             existingBook.setSinopsis(updatedBook.getSinopsis());
 
             bookRepository.save(existingBook);
-            return new Response(200, "", "Libro actualizado con éxito.");
+            return new Response(200, "Ok", "Libro actualizado con éxito.", "");
         } else {
-            return new Response(404, "Not Found", "El libro no existe.");
+            return new Response(404, "Not Found", "El libro no existe!", "404 Not Found!");
         }
     }
 
     public Response deleteBook(Long id) {
         Book book = findBook(id);
         if (book == null) {
-            return new Response(404, "Not Found", "El libro no existe.");
+            return new Response(404, "Not Found", "El libro no existe.", "404 Not Found!");
         }
         bookRepository.deleteById(book.getId());
-        return new Response(200, "", "Libro eliminado con éxito.");
+        return new Response(200, "OK", "Libro eliminado con éxito.", "");
     }
 }
