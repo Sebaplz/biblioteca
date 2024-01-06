@@ -20,17 +20,17 @@ public class UserService {
     @Autowired
     private RolesRepository rolesRepository;
 
-    public Response registerUser(User user) {
+    public ResponseUser registerUser(User user) {
         //id: 1 ADMIN   2 USER
         Optional<Roles> optionalRole = rolesRepository.findById(2L);
         if (optionalRole.isEmpty()) {
-            return new Response(404, "Not Found", "Problema al crear el usuario: Rol no encontrado", "404 Not Found!");
+            return new ResponseUser(404, "Not Found", "Problema al crear el usuario: Rol no encontrado", null, null,"404 Not Found!");
         }
         user.setRol(optionalRole.get());
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
         userRepository.save(user);
-        return new Response(201, "Created", user.getRol().getNombre_rol(), "");
+        return new ResponseUser(201, "Created", "OK", user.getRol().getNombre_rol(), user.getUsername(), "");
     }
 
     public ResponseUser authenticateUser(String email, String password) {

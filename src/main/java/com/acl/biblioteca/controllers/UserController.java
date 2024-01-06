@@ -18,11 +18,11 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
-        Response response =  userService.registerUser(user);
-        if (response.getStatus() == 201) {
-            return ResponseEntity.ok(response);
+        ResponseUser responseUser =  userService.registerUser(user);
+        if (responseUser.getStatus() == 201) {
+            return ResponseEntity.ok(responseUser);
         } else {
-            return ResponseEntity.status(response.getStatus()).body(response);
+            return ResponseEntity.status(responseUser.getStatus()).body(responseUser);
         }
     }
 
