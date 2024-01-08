@@ -6,11 +6,12 @@ import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.services.BookService;
 import com.acl.biblioteca.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -22,7 +23,7 @@ public class BookController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/book/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable("id") Long id) {
         Book book = bookService.findBook(id);
         if (book != null) {
@@ -33,8 +34,8 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> allBooks() {
-        return bookService.allBooks();
+    public Page<Object[]> allBooks(@PageableDefault (page = 0, size = 6)Pageable pageable) {
+        return bookService.allBooks(pageable);
     }
 
     @PostMapping("/new")

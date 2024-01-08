@@ -1,15 +1,13 @@
 package com.acl.biblioteca.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import java.util.Date;
 
 @Entity
 @Table(name = "books")
-@Getter
-@Setter
+@Data
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +23,6 @@ public class Book {
     private Date updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 }

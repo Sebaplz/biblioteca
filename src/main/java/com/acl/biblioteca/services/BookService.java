@@ -1,13 +1,14 @@
 package com.acl.biblioteca.services;
 
 import com.acl.biblioteca.models.User;
+import com.acl.biblioteca.repository.BookRepository;
 import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
-import com.acl.biblioteca.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +16,8 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Book> allBooks() {
-        return bookRepository.findAll();
+    public Page<Object[]> allBooks(Pageable pageable) {
+        return bookRepository.findAllBooks(pageable);
     }
 
     public Response addBook(Book book, User user) {
