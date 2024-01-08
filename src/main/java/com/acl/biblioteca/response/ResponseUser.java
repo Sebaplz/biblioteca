@@ -9,6 +9,7 @@ public class ResponseUser {
     private int status;
     private String statusText;
     private String message;
+    private String email;
     private String role;
     private String username;
     private String error;

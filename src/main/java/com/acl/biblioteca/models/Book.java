@@ -23,4 +23,7 @@ public class Book {
     @Column(updatable = false)
     private Date createdAt;
     private Date updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

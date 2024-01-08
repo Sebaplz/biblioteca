@@ -1,5 +1,6 @@
 package com.acl.biblioteca.services;
 
+import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.repository.BookRepository;
@@ -18,10 +19,11 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Response addBook(Book book) {
-        if (book == null) {
+    public Response addBook(Book book, User user) {
+        if (book == null || user == null) {
             return new Response(404, "Not Found", "Problema al crear el libro!", "404 Not Found!");
         }
+        book.setUser(user);
         bookRepository.save(book);
         return new Response(201, "Created", "Libro creado con éxito.", "");
     }

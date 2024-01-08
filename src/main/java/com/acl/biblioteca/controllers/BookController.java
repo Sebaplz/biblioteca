@@ -1,8 +1,10 @@
 package com.acl.biblioteca.controllers;
 
+import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.services.BookService;
+import com.acl.biblioteca.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable("id") Long id) {
@@ -33,12 +38,17 @@ public class BookController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> addBook(@RequestBody Book book) {
-        Response response = bookService.addBook(book);
-        if (response.getStatus() == 201) {
-            return ResponseEntity.ok(response);
+    public ResponseEntity<?> addBook(@RequestBody Book book, @RequestParam String email) {
+        User user = userService.findUser(email);
+        if (userService.isAdmin(user)) {
+            Response response = bookService.addBook(book, user);
+            if (response.getStatus() == 201) {
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(response.getStatus()).body(response);
+            }
         } else {
-            return ResponseEntity.status(response.getStatus()).body(response);
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
         }
     }
 
