@@ -21,7 +21,7 @@ public class Book {
     private String nombre;
     private String autor;
     private String imagen;
-    private int precio;
+    private int paginas;
     @Lob
     private String sinopsis;
     @Column(updatable = false)

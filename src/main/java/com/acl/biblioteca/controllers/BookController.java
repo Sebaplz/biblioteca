@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,4 +73,23 @@ public class BookController {
             return ResponseEntity.status(response.getStatus()).body(response);
         }
     }
+
+    @GetMapping("/download/{id}")
+    public ResponseEntity<?> downloadBook(@PathVariable("id") Long id) {
+        try {
+            Book book = bookService.findBook(id);
+            if (book == null) {
+                return ResponseEntity.notFound().build();
+            }
+            String content = String.format("{\"nombre\": \"%s\", \"autor\": \"%s\", \"sinopsis\": \"%s\"}",
+                    book.getNombre(), book.getAutor(), book.getSinopsis());
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=" + book.getNombre() + ".txt")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(content.getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud de descarga");
+        }
+    }
+
 }

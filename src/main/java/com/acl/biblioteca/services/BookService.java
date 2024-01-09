@@ -40,7 +40,7 @@ public class BookService {
             existingBook.setNombre(updatedBook.getNombre());
             existingBook.setAutor(updatedBook.getAutor());
             existingBook.setImagen(updatedBook.getImagen());
-            existingBook.setPrecio(updatedBook.getPrecio());
+            existingBook.setPaginas(updatedBook.getPaginas());
             existingBook.setSinopsis(updatedBook.getSinopsis());
 
             bookRepository.save(existingBook);
