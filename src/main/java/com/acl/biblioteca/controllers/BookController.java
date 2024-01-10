@@ -55,22 +55,32 @@ public class BookController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id) {
-        Response response = bookService.deleteBook(id);
-        if (response.getStatus() == 200) {
-            return ResponseEntity.ok(response);
+    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id, @RequestParam String email) {
+        User user = userService.findUser(email);
+        if (userService.isAdmin(user)) {
+            Response response = bookService.deleteBook(id);
+            if (response.getStatus() == 200) {
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(response.getStatus()).body(response);
+            }
         } else {
-            return ResponseEntity.status(response.getStatus()).body(response);
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
         }
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> editBook(@PathVariable("id") Long id, @RequestBody Book updatedBook) {
-        Response response = bookService.editBook(id, updatedBook);
-        if (response.getStatus() == 200) {
-            return ResponseEntity.ok(response);
+    public ResponseEntity<?> editBook(@PathVariable("id") Long id, @RequestBody Book updatedBook,  @RequestParam String email) {
+        User user = userService.findUser(email);
+        if (userService.isAdmin(user)) {
+            Response response = bookService.editBook(id, updatedBook);
+            if (response.getStatus() == 200) {
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(response.getStatus()).body(response);
+            }
         } else {
-            return ResponseEntity.status(response.getStatus()).body(response);
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
         }
     }
 
