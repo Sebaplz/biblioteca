@@ -83,22 +83,4 @@ public class BookController {
         }
     }
 
-    @GetMapping("/download/{id}")
-    public ResponseEntity<?> downloadBook(@PathVariable("id") Long id) {
-        try {
-            Book book = bookService.findBook(id);
-            if (book == null) {
-                return ResponseEntity.notFound().build();
-            }
-            String content = String.format("{\"nombre\": \"%s\", \"autor\": \"%s\", \"sinopsis\": \"%s\"}",
-                    book.getTitle(), book.getAuthor(), book.getSynopsis());
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=" + book.getTitle() + ".txt")
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(content.getBytes());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud de descarga");
-        }
-    }
-
 }
