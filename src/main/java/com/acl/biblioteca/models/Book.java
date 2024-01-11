@@ -18,12 +18,12 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
-    private String autor;
-    private String imagen;
-    private int paginas;
+    private String title;
+    private String author;
+    private String image;
+    private int pages;
     @Lob
-    private String sinopsis;
+    private String synopsis;
     @Column(updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;

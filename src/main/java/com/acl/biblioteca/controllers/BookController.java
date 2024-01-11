@@ -8,7 +8,6 @@ import com.acl.biblioteca.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +34,12 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<Object[]> allBooks(@PageableDefault (page = 0, size = 6)Pageable pageable) {
+    public Page<Object[]> getAllBooks(Pageable pageable) {
         return bookService.allBooks(pageable);
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> addBook(@RequestBody Book book, @RequestParam String email) {
+    public ResponseEntity<?> createBook(@RequestBody Book book, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
             Response response = bookService.addBook(book, user);
@@ -70,7 +69,7 @@ public class BookController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> editBook(@PathVariable("id") Long id, @RequestBody Book updatedBook,  @RequestParam String email) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody Book updatedBook,  @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
             Response response = bookService.editBook(id, updatedBook);
@@ -92,9 +91,9 @@ public class BookController {
                 return ResponseEntity.notFound().build();
             }
             String content = String.format("{\"nombre\": \"%s\", \"autor\": \"%s\", \"sinopsis\": \"%s\"}",
-                    book.getNombre(), book.getAutor(), book.getSinopsis());
+                    book.getTitle(), book.getAuthor(), book.getSynopsis());
             return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=" + book.getNombre() + ".txt")
+                    .header("Content-Disposition", "attachment; filename=" + book.getTitle() + ".txt")
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(content.getBytes());
         } catch (Exception e) {

@@ -28,7 +28,6 @@ public class UserService {
     }
 
     public ResponseUser registerUser(User user) {
-        //id: 1 ADMIN   2 USER
         Optional<Roles> optionalRole = rolesRepository.findById(2L);
         if (optionalRole.isEmpty()) {
             return new ResponseUser(404, "Not Found", "Problema al crear el usuario: Rol no encontrado", null,null, null,"404 Not Found!");

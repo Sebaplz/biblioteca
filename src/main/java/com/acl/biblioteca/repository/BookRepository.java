@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    @Query("SELECT new map(b.id as id, b.nombre as nombre, b.imagen as imagen, b.paginas as paginas, b.autor as autor) FROM Book b")
+    @Query("SELECT new map(b.id as id, b.title as title, b.image as image, b.pages as pages, b.author as author) FROM Book b")
     Page<Object[]> findAllBooks(Pageable pageable);
 }

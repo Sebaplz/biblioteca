@@ -37,11 +37,11 @@ public class BookService {
     public Response editBook(Long id, Book updatedBook) {
         Book existingBook = findBook(id);
         if (existingBook != null) {
-            existingBook.setNombre(updatedBook.getNombre());
-            existingBook.setAutor(updatedBook.getAutor());
-            existingBook.setImagen(updatedBook.getImagen());
-            existingBook.setPaginas(updatedBook.getPaginas());
-            existingBook.setSinopsis(updatedBook.getSinopsis());
+            existingBook.setTitle(updatedBook.getTitle());
+            existingBook.setAuthor(updatedBook.getAuthor());
+            existingBook.setImage(updatedBook.getImage());
+            existingBook.setPages(updatedBook.getPages());
+            existingBook.setSynopsis(updatedBook.getSynopsis());
 
             bookRepository.save(existingBook);
             return new Response(200, "Ok", "Libro actualizado con éxito.", "");
