@@ -7,6 +7,8 @@ import com.acl.biblioteca.repository.UserRepository;
 import com.acl.biblioteca.response.ResponseUser;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +20,10 @@ public class UserService {
 
     @Autowired
     private RolesRepository rolesRepository;
+
+    public Page<Object[]> allUsersByRol(Pageable pageable) {
+        return userRepository.findAllUsersByRol(pageable);
+    }
 
     public User findUser(String email) {
         return userRepository.findByEmail(email);
