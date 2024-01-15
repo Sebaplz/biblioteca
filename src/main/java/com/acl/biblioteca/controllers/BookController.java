@@ -1,5 +1,6 @@
 package com.acl.biblioteca.controllers;
 
+import com.acl.biblioteca.dto.BookDto;
 import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/books")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${CORS_ORIGIN}")
 public class BookController {
     @Autowired
     private BookService bookService;
@@ -33,15 +34,15 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<Object[]> getAllBooks(Pageable pageable) {
-        return bookService.allBooks(pageable);
+    public Page<BookDto> getAllBooks(Pageable pageable) {
+        return bookService.allBooksDto(pageable);
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> createBook(@RequestBody Book book, @RequestParam String email) {
+    public ResponseEntity<?> createBook(@RequestBody BookDto bookDto, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
-            Response response = bookService.addBook(book, user);
+            Response response = bookService.addBook(bookDto, user);
             if (response.getStatus() == 201) {
                 return ResponseEntity.ok(response);
             } else {
@@ -68,10 +69,10 @@ public class BookController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody Book updatedBook,  @RequestParam String email) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody BookDto updatedBookDto, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
-            Response response = bookService.editBook(id, updatedBook);
+            Response response = bookService.editBook(id, updatedBookDto);
             if (response.getStatus() == 200) {
                 return ResponseEntity.ok(response);
             } else {

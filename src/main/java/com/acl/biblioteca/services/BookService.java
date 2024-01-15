@@ -1,5 +1,6 @@
 package com.acl.biblioteca.services;
 
+import com.acl.biblioteca.dto.BookDto;
 import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.repository.BookRepository;
 import com.acl.biblioteca.response.Response;
@@ -16,14 +17,21 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Page<Object[]> allBooks(Pageable pageable) {
-        return bookRepository.findAllBooks(pageable);
+    public Page<BookDto> allBooksDto(Pageable pageable) {
+        return bookRepository.findAllBooksDto(pageable);
     }
 
-    public Response addBook(Book book, User user) {
-        if (book == null || user == null) {
+    public Response addBook(BookDto bookDto, User user) {
+        if (bookDto == null || user == null) {
             return new Response(404, "Not Found", "Problema al crear el libro!", "404 Not Found!");
         }
+        Book book = new Book();
+        book.setTitle(bookDto.getTitle());
+        book.setAuthor(bookDto.getAuthor());
+        book.setImage(bookDto.getImage());
+        book.setPages(bookDto.getPages());
+        book.setSynopsis(bookDto.getSynopsis());
+
         book.setUser(user);
         bookRepository.save(book);
         return new Response(201, "Created", "Libro creado con éxito.", "");
@@ -34,14 +42,14 @@ public class BookService {
         return optionalBook.orElse(null);
     }
 
-    public Response editBook(Long id, Book updatedBook) {
+    public Response editBook(Long id, BookDto updatedBookDto) {
         Book existingBook = findBook(id);
         if (existingBook != null) {
-            existingBook.setTitle(updatedBook.getTitle());
-            existingBook.setAuthor(updatedBook.getAuthor());
-            existingBook.setImage(updatedBook.getImage());
-            existingBook.setPages(updatedBook.getPages());
-            existingBook.setSynopsis(updatedBook.getSynopsis());
+            existingBook.setTitle(updatedBookDto.getTitle());
+            existingBook.setAuthor(updatedBookDto.getAuthor());
+            existingBook.setImage(updatedBookDto.getImage());
+            existingBook.setPages(updatedBookDto.getPages());
+            existingBook.setSynopsis(updatedBookDto.getSynopsis());
 
             bookRepository.save(existingBook);
             return new Response(200, "Ok", "Libro actualizado con éxito.", "");

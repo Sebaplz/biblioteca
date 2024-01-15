@@ -1,5 +1,6 @@
 package com.acl.biblioteca.services;
 
+import com.acl.biblioteca.dto.UserDto;
 import com.acl.biblioteca.models.Roles;
 import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.repository.RolesRepository;
@@ -21,7 +22,7 @@ public class UserService {
     @Autowired
     private RolesRepository rolesRepository;
 
-    public Page<Object[]> allUsersByRol(Pageable pageable) {
+    public Page<UserDto> allUsersByRol(Pageable pageable) {
         return userRepository.findAllUsersByRol(pageable);
     }
 

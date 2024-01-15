@@ -1,5 +1,6 @@
 package com.acl.biblioteca.controllers;
 
+import com.acl.biblioteca.dto.UserDto;
 import com.acl.biblioteca.models.User;
 import com.acl.biblioteca.response.ResponseUser;
 import com.acl.biblioteca.services.UserService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${CORS_ORIGIN}")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -41,10 +42,10 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<Page<Object[]>> getAllUsersByRol(Pageable pageable, @RequestParam String email){
+    public ResponseEntity<Page<UserDto>> getAllUsersByRol(Pageable pageable, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
-            Page<Object[]> usersByRol = userService.allUsersByRol(pageable);
+            Page<UserDto> usersByRol = userService.allUsersByRol(pageable);
             return ResponseEntity.ok(usersByRol);
         }
         else {
