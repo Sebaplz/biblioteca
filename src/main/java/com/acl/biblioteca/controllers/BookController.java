@@ -6,12 +6,15 @@ import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.models.Book;
 import com.acl.biblioteca.services.BookService;
 import com.acl.biblioteca.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -39,7 +42,7 @@ public class BookController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> createBook(@RequestBody BookDto bookDto, @RequestParam String email) {
+    public ResponseEntity<?> createBook(@Valid @RequestBody BookDto bookDto, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
             Response response = bookService.addBook(bookDto, user);
@@ -69,7 +72,7 @@ public class BookController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody BookDto updatedBookDto, @RequestParam String email) {
+    public ResponseEntity<?> updateBook(@Valid @PathVariable("id") Long id, @RequestBody BookDto updatedBookDto, @RequestParam String email) {
         User user = userService.findUser(email);
         if (userService.isAdmin(user)) {
             Response response = bookService.editBook(id, updatedBookDto);
@@ -83,4 +86,15 @@ public class BookController {
         }
     }
 
+    @PostMapping("/download/{id}")
+    public ResponseEntity<String> increaseDownloadCount(@PathVariable("id") Long id) {
+        String result = bookService.increaseDownloadCount(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/downloads")
+    public ResponseEntity<List<BookDto>> getAllBooksDownloads(Pageable pageable) {
+        List<BookDto> bookDtoList = bookService.getAllBooksDownloads(pageable);
+        return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
+    }
 }

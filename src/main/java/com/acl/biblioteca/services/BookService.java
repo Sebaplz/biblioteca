@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -65,5 +67,23 @@ public class BookService {
         }
         bookRepository.deleteById(book.getId());
         return new Response(200, "OK", "Libro eliminado con éxito.", "");
+    }
+
+    public String increaseDownloadCount(Long id) {
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book != null) {
+            book.setDownloads(book.getDownloads() + 1);
+            bookRepository.save(book);
+            return "Contador de descargas aumentado con éxito";
+        } else {
+            return "Libro no encontrado";
+        }
+    }
+
+    public List<BookDto> getAllBooksDownloads(Pageable pageable) {
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        return bookPage.getContent().stream()
+                .map(book -> new BookDto(book.getId(), book.getTitle(), book.getAuthor(), book.getDownloads()))
+                .collect(Collectors.toList());
     }
 }
