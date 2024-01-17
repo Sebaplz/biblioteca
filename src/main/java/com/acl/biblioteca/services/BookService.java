@@ -36,7 +36,7 @@ public class BookService {
 
         book.setUser(user);
         bookRepository.save(book);
-        return new Response(201, "Created", "Libro creado con éxito.", "");
+        return new Response(201, "Created", "Libro creado con éxito.", book.getId().toString());
     }
 
     public Book findBook(Long id) {

@@ -26,5 +26,5 @@ public class User {
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_rol")
-    private Roles rol;
+    private Rol rol;
 }
