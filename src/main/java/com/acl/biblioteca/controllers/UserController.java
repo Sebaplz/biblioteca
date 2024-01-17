@@ -2,6 +2,7 @@ package com.acl.biblioteca.controllers;
 
 import com.acl.biblioteca.dto.UserDto;
 import com.acl.biblioteca.models.User;
+import com.acl.biblioteca.response.Response;
 import com.acl.biblioteca.response.ResponseUser;
 import com.acl.biblioteca.services.UserService;
 import jakarta.validation.Valid;
@@ -21,6 +22,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
+        if (userService.findUser(user.getEmail()) != null) {
+            Response errorResponse = new Response(HttpStatus.BAD_REQUEST.value(), "Conflict","El Correo Electrónico ya esta en uso.", "Error 409");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
         ResponseUser responseUser =  userService.registerUser(user);
         if (responseUser.getStatus() == 201) {
             return ResponseEntity.ok(responseUser);
