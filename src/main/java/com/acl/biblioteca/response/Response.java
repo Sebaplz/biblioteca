@@ -8,5 +8,6 @@ public class Response {
     private int status;
     private String statusText;
     private String message;
+    private Long id;
     private String error;
 }

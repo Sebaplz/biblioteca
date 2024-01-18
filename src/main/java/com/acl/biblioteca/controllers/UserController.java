@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
         if (userService.findUser(user.getEmail()) != null) {
-            Response errorResponse = new Response(HttpStatus.BAD_REQUEST.value(), "Conflict","El Correo Electrónico ya esta en uso.", "Error 409");
+            Response errorResponse = new Response(HttpStatus.BAD_REQUEST.value(), "Conflict","El Correo Electrónico ya esta en uso.", null,"Error 409");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         ResponseUser responseUser =  userService.registerUser(user);

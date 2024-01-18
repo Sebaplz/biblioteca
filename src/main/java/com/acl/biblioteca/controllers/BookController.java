@@ -52,7 +52,7 @@ public class BookController {
                 return ResponseEntity.status(response.getStatus()).body(response);
             }
         } else {
-            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", null,"403 Forbidden"));
         }
     }
 
@@ -67,7 +67,7 @@ public class BookController {
                 return ResponseEntity.status(response.getStatus()).body(response);
             }
         } else {
-            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", null,"403 Forbidden"));
         }
     }
 
@@ -82,7 +82,7 @@ public class BookController {
                 return ResponseEntity.status(response.getStatus()).body(response);
             }
         } else {
-            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", "403 Forbidden"));
+            return ResponseEntity.status(403).body(new Response(403, "Forbidden", "No tienes permisos para realizar esta acción", null,"403 Forbidden"));
         }
     }
 

@@ -57,7 +57,7 @@ public class BookServiceTest {
 
             assertEquals(201, response.getStatus());
 
-            Long bookId = Long.parseLong(response.getError());
+            Long bookId = response.getId();
 
             Book foundBook = bookService.findBook(bookId);
 
@@ -82,7 +82,7 @@ public class BookServiceTest {
             Response addResponse = bookService.addBook(bookDto, user);
             assertEquals(201, addResponse.getStatus());
 
-            Long bookId = Long.parseLong(addResponse.getError());
+            Long bookId = addResponse.getId();
 
             BookDto updatedBookDto = new BookDto();
             updatedBookDto.setTitle("Libro editado");
@@ -121,7 +121,7 @@ public class BookServiceTest {
             Response addResponse = bookService.addBook(bookDto, user);
             assertEquals(201, addResponse.getStatus());
 
-            Long bookId = Long.parseLong(addResponse.getError());
+            Long bookId = addResponse.getId();
 
             Response deleteResponse = bookService.deleteBook(bookId);
 

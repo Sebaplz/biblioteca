@@ -25,7 +25,7 @@ public class BookService {
 
     public Response addBook(BookDto bookDto, User user) {
         if (bookDto == null || user == null) {
-            return new Response(404, "Not Found", "Problema al crear el libro!", "404 Not Found!");
+            return new Response(404, "Not Found", "Problema al crear el libro!", null,"404 Not Found!");
         }
         Book book = new Book();
         book.setTitle(bookDto.getTitle());
@@ -36,7 +36,7 @@ public class BookService {
 
         book.setUser(user);
         bookRepository.save(book);
-        return new Response(201, "Created", "Libro creado con éxito.", book.getId().toString());
+        return new Response(201, "Created", "Libro creado con éxito.", book.getId(), null);
     }
 
     public Book findBook(Long id) {
@@ -54,19 +54,19 @@ public class BookService {
             existingBook.setSynopsis(updatedBookDto.getSynopsis());
 
             bookRepository.save(existingBook);
-            return new Response(200, "Ok", "Libro actualizado con éxito.", "");
+            return new Response(200, "Ok", "Libro actualizado con éxito.", existingBook.getId(), null );
         } else {
-            return new Response(404, "Not Found", "El libro no existe!", "404 Not Found!");
+            return new Response(404, "Not Found", "El libro no existe!", null,"404 Not Found!");
         }
     }
 
     public Response deleteBook(Long id) {
         Book book = findBook(id);
         if (book == null) {
-            return new Response(404, "Not Found", "El libro no existe.", "404 Not Found!");
+            return new Response(404, "Not Found", "El libro no existe.", null,"404 Not Found!");
         }
         bookRepository.deleteById(book.getId());
-        return new Response(200, "OK", "Libro eliminado con éxito.", "");
+        return new Response(200, "OK", "Libro eliminado con éxito.", book.getId(), null);
     }
 
     public String increaseDownloadCount(Long id) {
