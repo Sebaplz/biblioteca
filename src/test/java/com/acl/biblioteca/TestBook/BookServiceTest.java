@@ -30,11 +30,16 @@ public class BookServiceTest {
 
         User user = userService.findUser("sebastian.h.neira@outlook.com");
 
-        Response response = bookService.addBook(bookDto, user);
+        if (userService.isAdmin(user)) {
+            Response response = bookService.addBook(bookDto, user);
 
-        assertEquals(201, response.getStatus());
-        assertEquals("Created", response.getStatusText());
-        assertEquals("Libro creado con éxito.", response.getMessage());
+            assertEquals(201, response.getStatus());
+            assertEquals("Created", response.getStatusText());
+            assertEquals("Libro creado con éxito.", response.getMessage());
+        } else {
+            fail("Usuario no es administrador");
+        }
+
     }
 
     @Test
@@ -47,16 +52,20 @@ public class BookServiceTest {
 
         User user = userService.findUser("sebastian.h.neira@outlook.com");
 
-        Response response = bookService.addBook(bookDto, user);
-        assertEquals(201, response.getStatus());
+        if (userService.isAdmin(user)) {
+            Response response = bookService.addBook(bookDto, user);
 
-        Long bookId = Long.parseLong(response.getError());
+            assertEquals(201, response.getStatus());
 
-        Book foundBook = bookService.findBook(bookId);
+            Long bookId = Long.parseLong(response.getError());
 
-        assertNotNull(foundBook);
-        assertEquals("Libro de prueba", foundBook.getTitle());
+            Book foundBook = bookService.findBook(bookId);
 
+            assertNotNull(foundBook);
+            assertEquals("Libro de prueba", foundBook.getTitle());
+        } else {
+            fail("Usuario no es administrador");
+        }
     }
 
     @Test
@@ -67,32 +76,36 @@ public class BookServiceTest {
         bookDto.setImage("imagen-prueba.jpg");
         bookDto.setPages(150);
 
-        User user = userService.findUser("sebastian.h.neira@outlook.com");
+        User user = userService.findUser("prueba@prueba.com");
 
-        Response addResponse = bookService.addBook(bookDto, user);
-        assertEquals(201, addResponse.getStatus());
+        if (userService.isAdmin(user)) {
+            Response addResponse = bookService.addBook(bookDto, user);
+            assertEquals(201, addResponse.getStatus());
 
-        Long bookId = Long.parseLong(addResponse.getError());
+            Long bookId = Long.parseLong(addResponse.getError());
 
-        BookDto updatedBookDto = new BookDto();
-        updatedBookDto.setTitle("Libro editado");
-        updatedBookDto.setAuthor("Nuevo autor");
-        updatedBookDto.setImage("nueva-imagen.jpg");
-        updatedBookDto.setPages(200);
+            BookDto updatedBookDto = new BookDto();
+            updatedBookDto.setTitle("Libro editado");
+            updatedBookDto.setAuthor("Nuevo autor");
+            updatedBookDto.setImage("nueva-imagen.jpg");
+            updatedBookDto.setPages(200);
 
-        Response editResponse = bookService.editBook(bookId, updatedBookDto);
+            Response editResponse = bookService.editBook(bookId, updatedBookDto);
 
-        assertEquals(200, editResponse.getStatus());
-        assertEquals("Ok", editResponse.getStatusText());
-        assertEquals("Libro actualizado con éxito.", editResponse.getMessage());
+            assertEquals(200, editResponse.getStatus());
+            assertEquals("Ok", editResponse.getStatusText());
+            assertEquals("Libro actualizado con éxito.", editResponse.getMessage());
 
-        Book editedBook = bookService.findBook(bookId);
+            Book editedBook = bookService.findBook(bookId);
 
-        assertNotNull(editedBook);
-        assertEquals("Libro editado", editedBook.getTitle());
-        assertEquals("Nuevo autor", editedBook.getAuthor());
-        assertEquals("nueva-imagen.jpg", editedBook.getImage());
-        assertEquals(200, editedBook.getPages());
+            assertNotNull(editedBook);
+            assertEquals("Libro editado", editedBook.getTitle());
+            assertEquals("Nuevo autor", editedBook.getAuthor());
+            assertEquals("nueva-imagen.jpg", editedBook.getImage());
+            assertEquals(200, editedBook.getPages());
+        } else {
+            fail("Usuario no es administrador");
+        }
     }
 
     @Test
@@ -104,20 +117,24 @@ public class BookServiceTest {
         bookDto.setPages(150);
 
         User user = userService.findUser("sebastian.h.neira@outlook.com");
+        if (userService.isAdmin(user)) {
+            Response addResponse = bookService.addBook(bookDto, user);
+            assertEquals(201, addResponse.getStatus());
 
-        Response addResponse = bookService.addBook(bookDto, user);
-        assertEquals(201, addResponse.getStatus());
+            Long bookId = Long.parseLong(addResponse.getError());
 
-        Long bookId = Long.parseLong(addResponse.getError());
+            Response deleteResponse = bookService.deleteBook(bookId);
 
-        Response deleteResponse = bookService.deleteBook(bookId);
+            assertEquals(200, deleteResponse.getStatus());
+            assertEquals("OK", deleteResponse.getStatusText());
+            assertEquals("Libro eliminado con éxito.", deleteResponse.getMessage());
 
-        assertEquals(200, deleteResponse.getStatus());
-        assertEquals("OK", deleteResponse.getStatusText());
-        assertEquals("Libro eliminado con éxito.", deleteResponse.getMessage());
+            Book deletedBook = bookService.findBook(bookId);
 
-        Book deletedBook = bookService.findBook(bookId);
+            assertNull(deletedBook);
+        } else {
+            fail("Usuario no es administrador");
+        }
 
-        assertNull(deletedBook);
     }
 }
